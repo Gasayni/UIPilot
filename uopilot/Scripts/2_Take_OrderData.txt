@@ -1,0 +1,259 @@
+// 2. Гаджи. ПочтаРоссии. Берем данные с таблицы Orders
+
+// 1. будет брать данные с таблицы  и сохранять в переменные
+
+log
+log   Скрипт 2 стартовал!
+
+// Загружаем данные из скрипта
+set $login $login.1
+set $pass $pass.1
+set $nameSender $nameSender.1
+set $addressSender $addressSender.1
+set $indexSender $indexSender.1
+set $phoneSender $phoneSender.1
+log   загрузили данные из предыдущего скрипта
+
+//log $login
+//log $pass
+//log $nameSender
+//log $addressSender
+//log $indexSender
+//log $phoneSender
+//msg
+
+
+
+set #edge WindowFromCursor
+// Привязываемся к окну, чтобы работала смена раскладки клавиатуры
+set workwindow #edge
+log   привязались к окну
+
+// сразу переходим на следующий лист
+sendex @{Down}
+sendex @{Down}
+log   перешли на следующий лист
+
+// проверим, тот ли это лист (5 раз)
+log   проверка листа
+Repeat 5
+   // ищем флаг
+   log   ищем флаг
+   sendex ^f
+   set clipboard флаг
+   sendex ^v)
+   sendex {Enter}
+   sendex {Esc}
+   sendex {F2}
+   sendex ^a
+   sendex ^c
+   get clipboard $flag
+   sendex {Esc}
+   if  $flag != флаг
+      // если не прошло, возможно это не тот лист, перейдем на следующий лист
+      log   ошибка, переходим на следующий лист
+      sendex @{Down}
+   else
+      log   "успешно. Остаемся на этом листе"
+      goto successFlag
+   end_if
+End_Repeat
+
+// аварийный выход
+log   Аварийный выход со скрипта. Не нашли нужный лист (с данными отправителя)
+msg Войдите в свой аккаунт и запустите этот скрипт снова!
+end_script
+
+
+
+
+
+
+
+// Проверку прошел. Все хорошо, продолжаем
+:successFlag
+// Можем работать с таблицей
+// переходим к флагу(!)
+sendex ^{Down}
+log   спускаемся к заказу
+log   забираем все переменные из таблицы
+// забираем в переменную наименование товара
+repeat 3
+   sendex {Right}
+end_repeat
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $nameProduct
+sendex {Esc}
+log   наименование товара $nameProduct
+
+// забираем в переменную кол-во товара
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $countProduct
+sendex {Esc}
+log   кол-во товара $countProduct
+
+// забираем в переменную вес
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $weightProduct
+sendex {Esc}
+log   вес товара $weightProduct
+
+// забираем в переменную общую стоимость
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $costProduct
+sendex {Esc}
+log   стоимость товара $costProduct
+
+// забираем в переменную валюту
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $currency
+sendex {Esc}
+log   валюта $currency
+
+// забираем в переменную код ТНВЭД
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $tnved
+sendex {Esc}
+log   код ТНВЭД $tnved
+
+// забираем в переменную Страну происхождения
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $countryMade
+sendex {Esc}
+log   Страна происхождения $countryMade
+
+// забираем в переменную IOSS|VAT
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $iossVat
+sendex {Esc}
+log   "IOSS|VAT" $iossVat
+
+// забираем в переменную Данные полного адреса получателя
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $dataRecepient
+sendex {Esc}
+log   Полный адрес получателя "\n$dataRecepient"
+
+// забираем в переменную Страну получателя
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $counrtyRecepient
+sendex {Esc}
+log   Страна получателя $counrtyRecepient
+
+// забираем в переменную телефон получателя
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $phoneRecepient
+sendex {Esc}
+log   телефон получателя $phoneRecepient
+
+// забираем в переменную email получателя
+sendex {Right}
+sendex {F2}
+sendex ^a
+sendex ^c
+get clipboard $emailRecepient
+sendex {Esc}
+log   email получателя $emailRecepient
+
+
+
+
+// закрыть окно
+//sendex ^{F4}
+//wait 1s
+//log   Закрыли браузер Edge
+
+
+
+
+
+log   Начинаем обработку данных(полного адреса) получателя
+log   забираем данные из полного адреса получателя
+// Обработка данных получателя
+// Для США:
+//Peter J Broskey
+//136 MAIN ST
+//MARKLEYSBURG, PA 15459-1228
+
+// заберем ФИО получателя
+//поиск разделителя \n
+set $regexp "\r\n"
+set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+//получаем ФИО
+set $nameRecepient Delete($dataRecepient #position 100)
+//забираем
+set $dataRecepient Delete($dataRecepient 1 #position)
+log   ФИО получателя $nameRecepient
+
+// заберем оттуда адрес получателя
+//поиск разделителя \n
+set $regexp "\r\n"
+set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+// удаляем все кроме адреса
+set $addressRecepient Delete($dataRecepient #position 100)
+//удаляем адрес
+set $dataRecepient Delete($dataRecepient 1 #position)
+log   адрес получателя $addressRecepient
+
+// заберем населенный пункт и индекс получателя
+set #position posex("," $dataRecepient)
+set #pos (#position + 4)
+set $localRecepient Delete($dataRecepient #pos 100)
+log   населенный пункт получателя $localRecepient
+set $indexRecepient Delete($dataRecepient 1 #pos)
+log   индекс получателя $indexRecepient
+
+
+// Переходим к адресной строке
+sendex ^l
+log  открыли адресную строку
+set clipboard "https://www.pochta.ru/"
+sendex ^v
+sendex {Enter}
+
+
+
+
+
+log   "загружаем следующий скрипт: 3_Put_Order.txt"
+// загружаем следующий скрипт
+load_script 3 3_Put_Order.txt
+// запустить скрипт в 3 вкладке
+start_script 3
+// Ждем, даем время другому скрипту забрать из этого скрипта данные
+wait 10s
+
+log   Скрипт 2 завершился!
+end_script
