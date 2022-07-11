@@ -1,0 +1,144 @@
+// 4. Гаджи. ПочтаРоссии. Записываем полученный трек-номер в таблицу (sendex {Right}х15) и сдвигаем флаг
+log
+log   Скрипт 4 стартовал!
+
+
+// Загружаем данные из 3 скрипта
+set $trackNumber $trackNumber.3
+log     загрузили данные из предыдущего скрипта
+
+
+// Открываем браузер (Edge)
+//exec "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+//wait 3s
+//log     открыли браузер (Edge)
+
+
+//set WindowFromCursor
+set #edge Findwindow (Edge)
+//set #edge WindowFromCursor
+// Привязываемся к окну, чтобы работала смена раскладки клавиатуры
+set workwindow #edge
+log     привязались к окну
+
+//Развернуть активное окно на весь экран
+showwindow #edge MAXIMIZE
+wait 1s
+log     развернули окно на весь экран
+
+
+log     переходим к адресной строке
+// Переходим к адресной строке
+sendex ^l
+log  открыли адресную строку
+set clipboard "https://docs.google.com/spreadsheets/"
+sendex ^v
+sendex {Enter}
+wait 10s
+
+
+
+log     переходим к рабочей таблице
+// включаем поиск и пишем слово "почта - доставка"
+sendex ^f
+set clipboard почта - доставка
+sendex ^v
+sendex {Enter}
+sendex {Esc}
+sendex {Enter}
+wait 10s
+// сразу переходим на следующий лист
+sendex @{Down}
+sendex @{Down}
+
+log     перешли на страницу с рабочей таблицей
+// Здесь сделаем проверку на вход несколько раз (5 раз)
+// Проверим не перекинул ли нас сайт на страницу входа
+// заодно проверим, тот ли это лист
+log     Начинаем проверку на нужный лист (с данными получателя)
+Repeat 5
+   // ищем флаг
+   log     ищем флаг
+   sendex ^f
+   set clipboard флаг
+   sendex ^v
+   sendex {Enter}
+   sendex {Esc}
+   sendex {F2}
+   sendex ^a
+   sendex ^c
+   get clipboard $flag
+   sendex {Esc}
+   if  $flag != флаг
+      // если не прошло, возможно это не тот лист, перейдем на следующий лист
+      log     не этот лист, переключаемся на следующий
+      sendex @{Down}
+   else
+      log     "этот лист. переходим на :successFlag"
+      goto successFlag
+   end_if
+End_Repeat
+
+// аварийный выход
+log     Аварийный выход со скрипта. Не нашли нужный лист (с данными отправителя)
+msg Войдите в свой аккаунт и запустите этот скрипт снова!
+end_script
+
+
+
+
+
+
+
+// Проверку прошел. Все хорошо, продолжаем
+:successFlag
+// Можем работать с таблицей
+// переходим к флагу(!)
+sendex ^{Down}
+log     перешли к флагу(!)
+
+log     переходим к ячейке трек-номера и вписываем полученное ранее значение
+// вписать полученный трек-номер (sendex {Right}х15)
+repeat 15
+   sendex {Right}
+end_repeat
+sendex {F2}
+sendex ^a
+set clipboard $trackNumber
+sendex ^v
+sendex {Enter}
+sendex {Up}
+log     трек-номер $trackNumber
+wait 3s
+
+// Теперь м. сдвинуть флаг на следующий заказ
+// переходим к началу строки
+sendex {Home}
+// вырезаем ячейку
+sendex ^x
+// вставляем ячейку ниже
+sendex {Down}
+sendex ^v
+wait 1s
+log     сдвинули флаг
+
+
+
+
+
+
+
+// закрыть окно
+sendex ^{F4}
+wait 3s
+log     Вышли из программы
+
+
+
+
+log     Скрипт 4 завершился!
+
+//Exit
+
+end_script
+

@@ -1,0 +1,123 @@
+// 1. Гаджи. ПочтаРоссии. Первый скрипт
+
+// 1.1. будет Запрашивать данные отправителя у пользователя и сохранять в переменные
+
+
+
+log  ...
+log  ...
+log  ...
+log   Скрипт 1.1 стартовал!
+
+set #a 0
+while #a != 1
+   set $login prompt ("Введите логин отправителя")
+   set #a prompt (!"Подтвердите ввод логина,   "$login",       верно?" Да Нет)
+   log  логин $login
+end_while
+
+set #a 0
+while #a != 1
+   set $pass prompt ("Введите пароль")
+   set #a prompt (!"Подтвердите ввод пароля,   "$pass",        верно?" Да Нет)
+   log  пароль $pass
+end_while
+
+set #a 0
+while #a != 1
+   set $nameSender prompt ("Введите ФИО отправителя, Латинскими, минимум 2 слова, Пример: Ivan Petrov")
+   set #a prompt (!"Подтвердите ввод ФИО,   "$nameSender",        верно?" Да Нет)
+   log фио отправителя $nameSender
+end_while
+
+set #a 0
+while #a != 1
+   set $indexSender prompt ("Введите индекс отправителя")
+   set #a prompt (!"Подтвердите ввод индекса,   "$indexSender",        верно?" Да Нет)
+   log  индекс отправителя $indexSender
+end_while
+
+set #a 0
+while #a != 1
+   set $addressSender prompt ("Введите адрес отправителя, Пример: г. Москва, ул. Беловежская 15, корпус 3, кв 14")
+   set #a prompt (!"Подтвердите ввод адреса,   "$addressSender",        верно?" Да Нет)
+   log  адрес отправителя $addressSender
+end_while
+
+set #a 0
+while #a != 1
+   set $phoneSender prompt ("Введите телефон отправителя, Пример: 9035035271")
+   set #a prompt (!"Подтвердите ввод пароля,   "$phoneSender",        верно?" Да Нет)
+   log  телефон оптравителя $phoneSender
+end_while
+// вызываем процедуру, кот оставит от номера только последние 10 цифр
+log  вызываем процедуру редактирования нормеа
+call phoneEditProcedure $phoneSender
+set $phoneSender $phoneEditProcedure
+log  телефон отправителя(исправленный) $phoneSender
+
+
+
+
+
+// Открываем браузер (Edge)
+exec "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+wait 5s
+log  Открыли браузер
+
+// Привязываемся к окну, чтобы работала смена раскладки клавиатуры
+set #edgeTable Findwindow (Edge)
+set workwindow #edgeTable
+log  привязались к рабочему окну
+
+//Развернуть активное окно на весь экран
+showwindow #edgeTable MAXIMIZE
+wait 300
+log  Развернули окно на весь экран
+
+
+// Переходим к адресной строке
+sendex ^l
+log  открыли адресную строку
+set clipboard "https://docs.google.com/spreadsheets/"
+sendex ^v
+sendex {Enter}
+wait 10s
+log  Перешли на страницу со всеми таблицами
+
+
+   // Страница со всеми таблицами
+
+// включаем поиск и пишем название таблицы
+sendex ^f
+set clipboard почта - доставка
+sendex ^v
+sendex {Enter}
+sendex {Esc}
+sendex {Enter}
+wait 5s
+
+
+
+
+log  Загружаем и запускаем следующий скрипт(2_Take_OrderData.txt)
+// загружаем следующий скрипт
+load_script 2 2_Take_OrderData.txt
+// запустить скрипт в 2 вкладке
+start_script 2
+// Ждем, даем время другому скрипту забрать из этого скрипта данные
+wait 10s
+
+log  Скрипт 1 завершился!
+end_script
+
+
+// процедура для редактирования номера телефона
+// процедура б. оставлять последние 10 цифр от полученного номера
+proc phoneEditProcedure $phoneSender
+   log  Внутри редактирования телефонного номера
+   set #sizeLine size($phoneSender)
+   set #n #sizeLine - 10
+   // удаляем с 1й позиции #n символов, т. е. убираем префикс номера
+   set $result Delete($phoneSender 1 #n)
+end_proc

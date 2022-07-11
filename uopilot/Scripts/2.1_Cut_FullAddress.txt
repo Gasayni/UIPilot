@@ -1,0 +1,143 @@
+// 2.1. –едактируем ѕолный адрес получател€
+log
+log   —крипт 2.1 стартовал!
+
+// «агружаем данные из 2 скрипта
+set $dataRecepient $dataRecepient.2
+set $counrtyRecepient $counrtyRecepient.2
+
+
+
+log   Ќачинаем обработку данных(полного адреса) получател€
+log   забираем данные из полного адреса получател€
+
+// заберем ‘»ќ получател€
+//поиск разделител€ \n
+set $regexp "\r\n"
+set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+//получаем ‘»ќ
+set $nameRecepient Delete($dataRecepient #position 500)
+//забираем
+set $dataRecepient Delete($dataRecepient 1 #position)
+log   ‘»ќ получател€ $nameRecepient
+
+// заберем оттуда адрес получател€
+//поиск разделител€ \n
+set $regexp "\r\n"
+set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+// удал€ем все кроме адреса
+set $addressRecepient Delete($dataRecepient #position 400)
+//удал€ем адрес
+set $dataRecepient Delete($dataRecepient 1 #position)
+log   адрес получател€ $addressRecepient
+
+// в зависимости от страны получател€ обработка данных получател€ разна€
+switch $counrtyRecepient
+   case USA:
+      // ƒл€ —Ўј:
+
+      //Peter J Broskey
+      //136 MAIN ST
+      //MARKLEYSBURG, PA 15459-1228
+//   или
+      //AMAZON.COM SERVICES, INC
+      //250 EMERALD DR
+      //MDW2
+      //JOLIET, IL 60433
+
+      // здесь б. проверка на длину адреса
+      //3 строку тоже нужно записать к адресу
+      // поэтому, если у нас остаетс€ больше 1 строки
+      set $regexp "\r\n"
+      set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+      if  #position != -1
+         // добавл€ем следующую строку тоже в адрес
+         set $address2 Delete($dataRecepient #position 300)
+         set $addressRecepient $addressRecepient $address2
+         log   добавленный адрес получател€ $addressRecepient
+         set $dataRecepient Delete($dataRecepient 1 #position)
+      end_if
+      // заберем населенный пункт и индекс получател€
+      set #position posex("," $dataRecepient)
+      set #pos (#position + 1)
+      set $localRecepient Delete($dataRecepient #pos 200)
+      set $dataRecepient Delete($dataRecepient 1 #pos)
+      // удал€ем все кроме региона
+      set #position posex(" " $dataRecepient)
+      set $localRe2 Delete($dataRecepient #position 100)
+      set $localRecepient $localRecepient $localRe2
+      log   населенный пункт получател€ $localRecepient
+      set $indexRecepient Delete($dataRecepient 1 #position)
+      log   индекс получател€ $indexRecepient
+
+      break
+   case UK:
+      // ƒл€ ¬еликобритании:
+
+      //Martin Dyble-Fiske
+      //20 Bayspole Road
+      //Long Stratton
+      //NORWICH
+      //Norfolk
+      //NR15 2PW
+//   или
+      //Leighana Checchia
+      //105 GROUNDWELL RD
+      //SWINDON
+      //Wilts
+      //SN1 2NA
+
+      set $regexp "\r\n"
+      set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+      // удал€ем все кроме региона
+      set #pos #position + 1
+      set $localRecepient Delete($dataRecepient #position 300)
+      set $dataRecepient Delete($dataRecepient 1 #pos)
+      // ƒобавл€ем к региону еще одну строку
+      set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+      set #pos #position + 1
+      set $localRec2 Delete($dataRecepient #position 200)
+      set $localRecepient $localRecepient $localRec2
+      set $dataRecepient Delete($dataRecepient 1 #pos)
+      //3 строку тоже нужно записать к региону, если у нас остаетс€ больше 1 строки
+      set $regexp "\r\n"
+      set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
+      if  #position != -1
+         // добавл€ем следующую строку тоже в регион
+         set $localRec2 Delete($dataRecepient #position 100)
+         set $localRecepient $localRecepient $localRec2
+      end_if
+      log   населенный пункт получател€ $localRecepient
+      set $indexRecepient Delete($dataRecepient 1 #position)
+      log   индекс получател€ $indexRecepient
+
+      break
+   case CAN:
+      // ƒл€  анады:
+
+      //Jean Rochon
+      //669 Morin St.
+      //North Bay, Ontario P1B 5R8
+
+      // заберем населенный пункт и индекс получател€
+      set #position posex("," $dataRecepient)
+      set #pos (#position + 1)
+      set $localRecepient Delete($dataRecepient #pos 200)
+      set $dataRecepient Delete($dataRecepient 1 #pos)
+      // удал€ем все кроме региона
+      set #position posex(" " $dataRecepient)
+      set $localRe2 Delete($dataRecepient #position 100)
+      set $localRecepient $localRecepient $localRe2
+      log   населенный пункт получател€ $localRecepient
+      set $indexRecepient Delete($dataRecepient 1 #position)
+      log   индекс получател€ $indexRecepient
+
+      break
+end_switch
+
+// ƒаем врем€ забрать отсюда данные
+wait 10s
+
+
+log     —крипт 2.1 завершилс€!
+end_script
