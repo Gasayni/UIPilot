@@ -19,7 +19,7 @@ switch #a
       load_script 1 1.1_Input_Logins.txt
       break
 end_switch
-start_script 1
+start_script 1224, 534
 
 
 
