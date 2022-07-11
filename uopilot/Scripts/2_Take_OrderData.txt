@@ -1,46 +1,42 @@
-// 2. Гаджи. ПочтаРоссии. Берем данные с таблицы Orders
+// 2. Р“Р°РґР¶Рё. РџРѕС‡С‚Р°Р РѕСЃСЃРёРё. Р‘РµСЂРµРј РґР°РЅРЅС‹Рµ СЃ С‚Р°Р±Р»РёС†С‹ Orders
 
-// 1. будет брать данные с таблицы  и сохранять в переменные
+// 1. Р±СѓРґРµС‚ Р±СЂР°С‚СЊ РґР°РЅРЅС‹Рµ СЃ С‚Р°Р±Р»РёС†С‹ РїРѕР»СѓС‡Р°С‚РµР»СЏ Рё СЃРѕС…СЂР°РЅСЏС‚СЊ РІ РїРµСЂРµРјРµРЅРЅС‹Рµ
 
 log
-log   Скрипт 2 стартовал!
+log   РЎРєСЂРёРїС‚ 2 СЃС‚Р°СЂС‚РѕРІР°Р»!
 
-// Загружаем данные из скрипта
+// Р—Р°РіСЂСѓР¶Р°РµРј РґР°РЅРЅС‹Рµ РёР· СЃРєСЂРёРїС‚Р°
 set $login $login.1
 set $pass $pass.1
 set $nameSender $nameSender.1
 set $addressSender $addressSender.1
 set $indexSender $indexSender.1
 set $phoneSender $phoneSender.1
-log   загрузили данные из предыдущего скрипта
-
-//log $login
-//log $pass
-//log $nameSender
-//log $addressSender
-//log $indexSender
-//log $phoneSender
-//msg
+log   Р·Р°РіСЂСѓР·РёР»Рё РґР°РЅРЅС‹Рµ РёР· РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЃРєСЂРёРїС‚Р°
 
 
 
 set #edge WindowFromCursor
-// Привязываемся к окну, чтобы работала смена раскладки клавиатуры
+// РџСЂРёРІСЏР·С‹РІР°РµРјСЃСЏ Рє РѕРєРЅСѓ, С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р°Р»Р° СЃРјРµРЅР° СЂР°СЃРєР»Р°РґРєРё РєР»Р°РІРёР°С‚СѓСЂС‹
 set workwindow #edge
-log   привязались к окну
+log   РїСЂРёРІСЏР·Р°Р»РёСЃСЊ Рє РѕРєРЅСѓ
 
-// сразу переходим на следующий лист
+
+
+
+
+// СЃСЂР°Р·Сѓ РїРµСЂРµС…РѕРґРёРј РЅР° СЃР»РµРґСѓСЋС‰РёР№ Р»РёСЃС‚
 sendex @{Down}
 sendex @{Down}
-log   перешли на следующий лист
+log   РїРµСЂРµС€Р»Рё РЅР° СЃР»РµРґСѓСЋС‰РёР№ Р»РёСЃС‚
 
-// проверим, тот ли это лист (5 раз)
-log   проверка листа
+// РїСЂРѕРІРµСЂРёРј, С‚РѕС‚ Р»Рё СЌС‚Рѕ Р»РёСЃС‚ (5 СЂР°Р·)
+log   РїСЂРѕРІРµСЂРєР° Р»РёСЃС‚Р°
 Repeat 5
-   // ищем флаг
-   log   ищем флаг
+   // РёС‰РµРј С„Р»Р°Рі
+   log   РёС‰РµРј С„Р»Р°Рі
    sendex ^f
-   set clipboard флаг
+   set clipboard С„Р»Р°Рі
    sendex ^v)
    sendex {Enter}
    sendex {Esc}
@@ -49,19 +45,19 @@ Repeat 5
    sendex ^c
    get clipboard $flag
    sendex {Esc}
-   if  $flag != флаг
-      // если не прошло, возможно это не тот лист, перейдем на следующий лист
-      log   ошибка, переходим на следующий лист
+   if  $flag != С„Р»Р°Рі
+      // РµСЃР»Рё РЅРµ РїСЂРѕС€Р»Рѕ, РІРѕР·РјРѕР¶РЅРѕ СЌС‚Рѕ РЅРµ С‚РѕС‚ Р»РёСЃС‚, РїРµСЂРµР№РґРµРј РЅР° СЃР»РµРґСѓСЋС‰РёР№ Р»РёСЃС‚
+      log   РѕС€РёР±РєР°, РїРµСЂРµС…РѕРґРёРј РЅР° СЃР»РµРґСѓСЋС‰РёР№ Р»РёСЃС‚
       sendex @{Down}
    else
-      log   "успешно. Остаемся на этом листе"
+      log   "СѓСЃРїРµС€РЅРѕ. РћСЃС‚Р°РµРјСЃСЏ РЅР° СЌС‚РѕРј Р»РёСЃС‚Рµ"
       goto successFlag
    end_if
 End_Repeat
 
-// аварийный выход
-log   Аварийный выход со скрипта. Не нашли нужный лист (с данными отправителя)
-msg Войдите в свой аккаунт и запустите этот скрипт снова!
+// Р°РІР°СЂРёР№РЅС‹Р№ РІС‹С…РѕРґ
+log   РђРІР°СЂРёР№РЅС‹Р№ РІС‹С…РѕРґ СЃРѕ СЃРєСЂРёРїС‚Р°. РќРµ РЅР°С€Р»Рё РЅСѓР¶РЅС‹Р№ Р»РёСЃС‚ (СЃ РґР°РЅРЅС‹РјРё РѕС‚РїСЂР°РІРёС‚РµР»СЏ)
+msg Р’РѕР№РґРёС‚Рµ РІ СЃРІРѕР№ Р°РєРєР°СѓРЅС‚ Рё Р·Р°РїСѓСЃС‚РёС‚Рµ СЌС‚РѕС‚ СЃРєСЂРёРїС‚ СЃРЅРѕРІР°!
 end_script
 
 
@@ -70,14 +66,14 @@ end_script
 
 
 
-// Проверку прошел. Все хорошо, продолжаем
+// РџСЂРѕРІРµСЂРєСѓ РїСЂРѕС€РµР». Р’СЃРµ С…РѕСЂРѕС€Рѕ, РїСЂРѕРґРѕР»Р¶Р°РµРј
 :successFlag
-// Можем работать с таблицей
-// переходим к флагу(!)
+// РњРѕР¶РµРј СЂР°Р±РѕС‚Р°С‚СЊ СЃ С‚Р°Р±Р»РёС†РµР№
+// РїРµСЂРµС…РѕРґРёРј Рє С„Р»Р°РіСѓ(!)
 sendex ^{Down}
-log   спускаемся к заказу
-log   забираем все переменные из таблицы
-// забираем в переменную наименование товара
+log   СЃРїСѓСЃРєР°РµРјСЃСЏ Рє Р·Р°РєР°Р·Сѓ
+log   Р·Р°Р±РёСЂР°РµРј РІСЃРµ РїРµСЂРµРјРµРЅРЅС‹Рµ РёР· С‚Р°Р±Р»РёС†С‹
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РЅР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РѕРІР°СЂР°
 repeat 3
    sendex {Right}
 end_repeat
@@ -86,63 +82,63 @@ sendex ^a
 sendex ^c
 get clipboard $nameProduct
 sendex {Esc}
-log   наименование товара $nameProduct
+log   РЅР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РѕРІР°СЂР° $nameProduct
 
-// забираем в переменную кол-во товара
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РєРѕР»-РІРѕ С‚РѕРІР°СЂР°
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $countProduct
 sendex {Esc}
-log   кол-во товара $countProduct
+log   РєРѕР»-РІРѕ С‚РѕРІР°СЂР° $countProduct
 
-// забираем в переменную вес
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РІРµСЃ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $weightProduct
 sendex {Esc}
-log   вес товара $weightProduct
+log   РІРµСЃ С‚РѕРІР°СЂР° $weightProduct
 
-// забираем в переменную общую стоимость
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РѕР±С‰СѓСЋ СЃС‚РѕРёРјРѕСЃС‚СЊ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $costProduct
 sendex {Esc}
-log   стоимость товара $costProduct
+log   СЃС‚РѕРёРјРѕСЃС‚СЊ С‚РѕРІР°СЂР° $costProduct
 
-// забираем в переменную валюту
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РІР°Р»СЋС‚Сѓ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $currency
 sendex {Esc}
-log   валюта $currency
+log   РІР°Р»СЋС‚Р° $currency
 
-// забираем в переменную код ТНВЭД
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РєРѕРґ РўРќР’Р­Р”
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $tnved
 sendex {Esc}
-log   код ТНВЭД $tnved
+log   РєРѕРґ РўРќР’Р­Р” $tnved
 
-// забираем в переменную Страну происхождения
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РЎС‚СЂР°РЅСѓ РїСЂРѕРёСЃС…РѕР¶РґРµРЅРёСЏ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $countryMade
 sendex {Esc}
-log   Страна происхождения $countryMade
+log   РЎС‚СЂР°РЅР° РїСЂРѕРёСЃС…РѕР¶РґРµРЅРёСЏ $countryMade
 
-// забираем в переменную IOSS|VAT
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ IOSS|VAT
 sendex {Right}
 sendex {F2}
 sendex ^a
@@ -151,109 +147,92 @@ get clipboard $iossVat
 sendex {Esc}
 log   "IOSS|VAT" $iossVat
 
-// забираем в переменную Данные полного адреса получателя
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ Р”Р°РЅРЅС‹Рµ РїРѕР»РЅРѕРіРѕ Р°РґСЂРµСЃР° РїРѕР»СѓС‡Р°С‚РµР»СЏ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $dataRecepient
 sendex {Esc}
-log   Полный адрес получателя "\n$dataRecepient"
+log   РџРѕР»РЅС‹Р№ Р°РґСЂРµСЃ РїРѕР»СѓС‡Р°С‚РµР»СЏ "\n$dataRecepient"
 
-// забираем в переменную Страну получателя
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ РЎС‚СЂР°РЅСѓ РїРѕР»СѓС‡Р°С‚РµР»СЏ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $counrtyRecepient
 sendex {Esc}
-log   Страна получателя $counrtyRecepient
+log   РЎС‚СЂР°РЅР° РїРѕР»СѓС‡Р°С‚РµР»СЏ $counrtyRecepient
 
-// забираем в переменную телефон получателя
+
+
+
+
+
+ //РћР±СЂР°С‚РёРјСЃСЏ Рє СЃРєСЂРёРїС‚Сѓ РѕР±СЂР°Р±РѕС‚РєРё РїРѕР»РЅРѕРіРѕ Р°РґСЂРµСЃР° РїРѕР»СѓС‡Р°С‚РµР»СЏ РёР· С‚Р°Р±Р»РёС†С‹ Рё РїРѕР»СѓС‡РёРј СЌР»РµРјРµРЅС‚С‹ Р°РґСЂРµСЃР°
+log   "Р·Р°РіСЂСѓР¶Р°РµРј СЃРєСЂРёРїС‚ РѕР±СЂР°Р±РѕС‚РєРё РїРѕР»РЅРѕРіРѕ Р°РґСЂРµСЃР° РїРѕР»СѓС‡Р°С‚РµР»СЏ: 2.1_Cut_FullAddress.txt"
+// Р·Р°РіСЂСѓР¶Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ СЃРєСЂРёРїС‚
+load_script 5 2.1_Cut_FullAddress.txt
+// Р·Р°РїСѓСЃС‚РёС‚СЊ СЃРєСЂРёРїС‚ РІ 5 РІРєР»Р°РґРєРµ
+start_script 5
+// Р–РґРµРј, РґР°РµРј РІСЂРµРјСЏ РґСЂСѓРіРѕРјСѓ СЃРєСЂРёРїС‚Сѓ Р·Р°Р±СЂР°С‚СЊ РёР· СЌС‚РѕРіРѕ СЃРєСЂРёРїС‚Р° РґР°РЅРЅС‹Рµ
+wait 5s
+// Р—Р°РіСЂСѓР¶Р°РµРј РґР°РЅРЅС‹Рµ РёР· 2.1 СЃРєСЂРёРїС‚Р°
+set $nameRecepient $nameRecepient.5
+set $addressRecepient $addressRecepient.5
+set $localRecepient $localRecepient.5
+set $indexRecepient $indexRecepient.5
+
+
+log nameRecepient  $nameRecepient
+log addressRecepient  $addressRecepient
+log localRecepient  $localRecepient
+log indexRecepient  $indexRecepient
+
+
+
+
+
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ С‚РµР»РµС„РѕРЅ РїРѕР»СѓС‡Р°С‚РµР»СЏ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $phoneRecepient
 sendex {Esc}
-log   телефон получателя $phoneRecepient
+log   С‚РµР»РµС„РѕРЅ РїРѕР»СѓС‡Р°С‚РµР»СЏ $phoneRecepient
 
-// забираем в переменную email получателя
+// Р·Р°Р±РёСЂР°РµРј РІ РїРµСЂРµРјРµРЅРЅСѓСЋ email РїРѕР»СѓС‡Р°С‚РµР»СЏ
 sendex {Right}
 sendex {F2}
 sendex ^a
 sendex ^c
 get clipboard $emailRecepient
 sendex {Esc}
-log   email получателя $emailRecepient
-
-
-
-
-// закрыть окно
-//sendex ^{F4}
-//wait 1s
-//log   Закрыли браузер Edge
+log   email РїРѕР»СѓС‡Р°С‚РµР»СЏ $emailRecepient
 
 
 
 
 
-log   Начинаем обработку данных(полного адреса) получателя
-log   забираем данные из полного адреса получателя
-// Обработка данных получателя
-// Для США:
-//Peter J Broskey
-//136 MAIN ST
-//MARKLEYSBURG, PA 15459-1228
-
-// заберем ФИО получателя
-//поиск разделителя \n
-set $regexp "\r\n"
-set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
-//получаем ФИО
-set $nameRecepient Delete($dataRecepient #position 100)
-//забираем
-set $dataRecepient Delete($dataRecepient 1 #position)
-log   ФИО получателя $nameRecepient
-
-// заберем оттуда адрес получателя
-//поиск разделителя \n
-set $regexp "\r\n"
-set #sub1 regexp (#position $hitstring $dataRecepient $regexp)
-// удаляем все кроме адреса
-set $addressRecepient Delete($dataRecepient #position 100)
-//удаляем адрес
-set $dataRecepient Delete($dataRecepient 1 #position)
-log   адрес получателя $addressRecepient
-
-// заберем населенный пункт и индекс получателя
-set #position posex("," $dataRecepient)
-set #pos (#position + 4)
-set $localRecepient Delete($dataRecepient #pos 100)
-log   населенный пункт получателя $localRecepient
-set $indexRecepient Delete($dataRecepient 1 #pos)
-log   индекс получателя $indexRecepient
 
 
-// Переходим к адресной строке
+// РџРµСЂРµС…РѕРґРёРј Рє Р°РґСЂРµСЃРЅРѕР№ СЃС‚СЂРѕРєРµ
 sendex ^l
-log  открыли адресную строку
+log  РѕС‚РєСЂС‹Р»Рё Р°РґСЂРµСЃРЅСѓСЋ СЃС‚СЂРѕРєСѓ
 set clipboard "https://www.pochta.ru/"
 sendex ^v
 sendex {Enter}
 
 
-
-
-
-log   "загружаем следующий скрипт: 3_Put_Order.txt"
-// загружаем следующий скрипт
+log   "Р·Р°РіСЂСѓР¶Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ СЃРєСЂРёРїС‚: 3_Put_Order.txt"
+// Р·Р°РіСЂСѓР¶Р°РµРј СЃР»РµРґСѓСЋС‰РёР№ СЃРєСЂРёРїС‚
 load_script 3 3_Put_Order.txt
-// запустить скрипт в 3 вкладке
+// Р·Р°РїСѓСЃС‚РёС‚СЊ СЃРєСЂРёРїС‚ РІ 3 РІРєР»Р°РґРєРµ
 start_script 3
-// Ждем, даем время другому скрипту забрать из этого скрипта данные
+// Р–РґРµРј, РґР°РµРј РІСЂРµРјСЏ РґСЂСѓРіРѕРјСѓ СЃРєСЂРёРїС‚Сѓ Р·Р°Р±СЂР°С‚СЊ РёР· СЌС‚РѕРіРѕ СЃРєСЂРёРїС‚Р° РґР°РЅРЅС‹Рµ
 wait 10s
 
-log   Скрипт 2 завершился!
+log   РЎРєСЂРёРїС‚ 2 Р·Р°РІРµСЂС€РёР»СЃСЏ!
 end_script
